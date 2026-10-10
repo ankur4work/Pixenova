@@ -1,0 +1,686 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Pixenova design system — "Violet Nova"
+
+   Every colour, radius, bevel and shadow the app paints is declared in the
+   :root block below and nowhere else, so re-theming is editing one block
+   rather than hunting hex codes across twenty files.
+
+   This is a deliberately different visual language from the other image apps
+   in this family, and the difference is GEOMETRY as much as hue — colour alone
+   reads as a re-skin. Five rules define it, and each one is the opposite of
+   what the sibling builds do:
+
+     1. VIOLET, NOT GREEN. The whole family sits in jade / emerald / teal.
+        Pixenova is violet → fuchsia on a plum ink, with amber for attention
+        and a lime-leaning emerald reserved *only* for success — so a success
+        tag can never be mistaken for a brand tag.
+     2. BEVELLED CORNERS, NOT SQUIRCLES OR PILLS. Panels are cut: one corner
+        is chamfered with clip-path (--px-notch). Nothing here is a squircle
+        (border-radius: 34%/34%) and no control is a full pill.
+     3. HEXAGONS FOR ICONS. Icon frames are six-sided, not rounded squares and
+        not ringed circles.
+     4. LIGHT HERO, NOT INVERTED INK. Brand presence comes from a lavender
+        wash, a radial nova glow in the top-right, and a gradient underline
+        along the bottom edge. Type is never reversed out of a dark panel in
+        the embedded app.
+     5. ACCENTS RUN DOWN THE LEFT, NOT ACROSS THE TOP. Stat tiles carry a
+        vertical accent bar on their leading edge and a faint index numeral.
+
+   The usage meter follows from rule 2: a single continuous track with a
+   diagonal-striped fill and a trailing percentage bubble, not a row of
+   discrete segments.
+   ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Brand ramp — violet 600 through fuchsia. */
+  --px-violet: #7c3aed;
+  --px-violet-dark: #6d28d9;
+  --px-violet-deep: #5b21b6;
+  --px-iris: #a855f7;
+  --px-fuchsia: #d946ef;
+  --px-nova: #c084fc;
+
+  /* Ink — plum-biased near-blacks, so dark text sits in the same hue family. */
+  --px-ink: #1b0b33;
+  --px-ink-2: #2e1458;
+  --px-muted: #6b5a85;
+  --px-muted-2: #8778a0;
+
+  /* Washes and hairlines. */
+  --px-wash: #faf6ff;
+  --px-wash-2: #f3ebff;
+  --px-wash-3: #ece1ff;
+  --px-line: #e4d8f5;
+  --px-line-soft: #efe7fb;
+
+  /* Semantic tones, each chosen to sit far from violet on the wheel. */
+  --px-amber: #f59e0b;
+  --px-amber-ink: #7c4a03;
+  --px-amber-wash: #fff8ec;
+  --px-amber-line: #f6dfb0;
+  --px-ok: #0f9d6e;
+  --px-ok-ink: #0a6e4d;
+  --px-ok-wash: #e9faf3;
+  --px-ok-line: #bfe9d8;
+  --px-bad: #e11d48;
+  --px-bad-ink: #9f1239;
+  --px-bad-wash: #fff1f4;
+  --px-bad-line: #f8cdd7;
+
+  /* Gradients. */
+  --px-grad: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
+  --px-grad-dark: linear-gradient(135deg, #6d28d9 0%, #a21caf 100%);
+  --px-grad-press: linear-gradient(135deg, #5b21b6 0%, #86198f 100%);
+  --px-grad-soft: linear-gradient(135deg, #f3ebff 0%, #fde8ff 100%);
+  --px-grad-line: linear-gradient(90deg, #7c3aed 0%, #a855f7 45%, #d946ef 100%);
+  --px-grad-rail: linear-gradient(180deg, #a855f7 0%, #7c3aed 55%, #6d28d9 100%);
+
+  --px-ring: rgba(124, 58, 237, 0.2);
+  --px-ring-strong: rgba(124, 58, 237, 0.34);
+
+  /* Geometry. 10px base — tighter than the siblings' 14px — plus the chamfer
+     size used by every bevelled panel. */
+  --px-radius: 10px;
+  --px-radius-lg: 12px;
+  --px-radius-sm: 7px;
+  --px-notch: 18px;
+  --px-notch-lg: 26px;
+
+  /* Violet-tinted elevation. Shadows are coloured, never neutral grey. */
+  --px-shadow-1: 0 1px 2px rgba(27, 11, 51, 0.05);
+  --px-shadow-2: 0 10px 26px -16px rgba(91, 33, 182, 0.42);
+  --px-shadow-3: 0 20px 44px -22px rgba(91, 33, 182, 0.5);
+}
+
+/* The chamfer. Applied as a utility so every bevelled surface cuts the same
+   corner by the same amount — mixing bevel sizes is what makes a "cut" theme
+   look accidental rather than designed. */
+.px-bevel {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--px-notch)) 0,
+    100% var(--px-notch),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* ── Polaris primary buttons ────────────────────────────────────────────── */
+.Polaris-Button--variantPrimary {
+  background: var(--px-grad) !important;
+  border-color: var(--px-violet) !important;
+  box-shadow: 0 2px 10px rgba(124, 58, 237, 0.3) !important;
+}
+.Polaris-Button--variantPrimary:hover:not(:disabled) {
+  background: var(--px-grad-dark) !important;
+  border-color: var(--px-violet-dark) !important;
+}
+.Polaris-Button--variantPrimary:active:not(:disabled) {
+  background: var(--px-grad-press) !important;
+}
+/* A disabled button must LOOK disabled. The rule above sets the gradient with
+   !important on every primary button, which would otherwise override Polaris's
+   own disabled styling — a button that cannot be clicked would look exactly
+   like one that can, and clicking it would appear to do nothing. */
+.Polaris-Button--variantPrimary:disabled,
+.Polaris-Button--variantPrimary[aria-disabled="true"] {
+  background: #ece9f1 !important;
+  border-color: #ece9f1 !important;
+  color: #9a93a6 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+.Polaris-Button--variantPrimary:disabled .Polaris-Text--root,
+.Polaris-Button--variantPrimary[aria-disabled="true"] .Polaris-Text--root {
+  color: inherit !important;
+}
+
+/* ── Links, focus rings, checkboxes ─────────────────────────────────────── */
+.Polaris-Link { color: var(--px-violet) !important; }
+.Polaris-Link:hover { color: var(--px-violet-deep) !important; }
+
+.Polaris-TextField__Input:focus {
+  border-color: var(--px-iris) !important;
+  box-shadow: 0 0 0 3px var(--px-ring) !important;
+}
+
+.Polaris-Checkbox__Input:checked + .Polaris-Checkbox__Backdrop {
+  background: var(--px-violet) !important;
+  border-color: var(--px-violet) !important;
+}
+
+/* ── Hero — light lavender panel, nova glow, gradient underline ─────────── */
+.px-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--px-wash-2);
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius-lg);
+  /* Rule 2: the leading panel cuts its top-right corner, at the larger size. */
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--px-notch-lg)) 0,
+    100% var(--px-notch-lg),
+    100% 100%,
+    0 100%
+  );
+  padding: 30px 34px 32px;
+  margin-bottom: 20px;
+  color: var(--px-ink);
+  box-shadow: var(--px-shadow-1);
+}
+/* The nova — a radial bloom in the top-right, behind the content. This is the
+   signature element: siblings put their accent on a left rail. */
+.px-hero::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -90px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(217, 70, 239, 0.22) 0%,
+    rgba(168, 85, 247, 0.14) 38%,
+    rgba(168, 85, 247, 0) 70%
+  );
+  pointer-events: none; /* decorative — must not block the hero button */
+  z-index: -1;
+}
+/* Gradient underline along the bottom edge, the counterpart to the glow. */
+.px-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--px-grad-line);
+}
+.px-hero-copy { max-width: 620px; }
+.px-hero-copy h1 {
+  font-size: 29px;
+  line-height: 1.16;
+  font-weight: 750;
+  letter-spacing: -0.028em;
+  margin: 0 0 10px 0;
+  color: var(--px-ink);
+}
+.px-hero-copy p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--px-muted);
+  margin: 0;
+}
+/* Wordmark eyebrow — hexagon dot + wide tracking, on a tinted plate. */
+.px-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--px-violet-deep);
+  background: #ffffff;
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius-sm);
+  padding: 5px 11px 5px 9px;
+  margin: 0;
+}
+.px-hero-tag::before {
+  content: "";
+  width: 9px;
+  height: 10px;
+  background: var(--px-grad);
+  /* Rule 3 — hexagon, not a dot or a rotated square. */
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+/* ── Stat tiles — leading accent bar + faint index numeral ──────────────── */
+.px-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .px-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.px-metric {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius);
+  padding: 15px 18px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  box-shadow: var(--px-shadow-1);
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+/* Rule 5 — the accent runs down the leading edge. */
+.px-metric::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--px-grad-rail);
+}
+.px-metric:hover {
+  transform: translateY(-2px);
+  border-color: var(--px-nova);
+  box-shadow: var(--px-shadow-2);
+}
+/* Faint index numeral in the trailing corner — a quiet ordinal that makes the
+   row read as a sequence of readings rather than four unrelated boxes. Sized
+   and positioned so it never competes with the figure for attention. */
+.px-metric-index {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--px-line);
+  pointer-events: none;
+  user-select: none;
+}
+.px-metric-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--px-muted-2);
+  margin: 0;
+  /* Leaves room for the index numeral so a long label can't run under it. */
+  padding-right: 22px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+/* A fixed figure height keeps numbers and pills on one baseline across tiles. */
+.px-metric-value,
+.px-metric-pill {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  max-width: 100%;
+}
+.px-metric-value {
+  font-size: 27px;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--px-ink);
+  margin: 0;
+}
+/* Text-valued metrics read as a status pill, not a broken headline. The
+   asymmetric radius (squared leading edge) is the chip signature. */
+.px-metric-pill {
+  box-sizing: border-box;
+  font-size: 12.5px;
+  font-weight: 750;
+  line-height: 1.2;
+  padding: 0 11px;
+  border-radius: 2px var(--px-radius-sm) var(--px-radius-sm) 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.px-metric-pill--brand     { background: var(--px-wash-2); color: var(--px-violet-deep); border: 1px solid var(--px-line); }
+.px-metric-pill--success   { background: var(--px-ok-wash); color: var(--px-ok-ink); border: 1px solid var(--px-ok-line); }
+.px-metric-pill--attention { background: var(--px-amber-wash); color: var(--px-amber-ink); border: 1px solid var(--px-amber-line); }
+.px-metric-pill--subdued   { background: #f4f2f8; color: var(--px-muted); border: 1px solid #e8e4ef; }
+
+/* ── Usage gauge — continuous striped track with a trailing bubble ──────── */
+.px-meter {
+  position: relative;
+  height: 12px;
+  width: 100%;
+  background: var(--px-wash-3);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.px-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.22) 0 5px,
+      rgba(255, 255, 255, 0) 5px 10px
+    ),
+    var(--px-grad);
+  transition: width 0.3s ease, background 0.25s ease;
+}
+/* Any usage at all should be visible, so the fill has a floor width. */
+.px-meter-fill.is-trace { min-width: 10px; }
+.px-meter.is-critical .px-meter-fill {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(255, 255, 255, 0.22) 0 5px,
+      rgba(255, 255, 255, 0) 5px 10px
+    ),
+    linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+}
+/* The reading sits beside the track rather than inside it, so a low
+   percentage is still legible. */
+.px-meter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.px-meter-row .px-meter { flex: 1 1 auto; }
+.px-meter-read {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--px-violet-deep);
+  background: var(--px-wash-2);
+  border: 1px solid var(--px-line);
+  border-radius: 2px var(--px-radius-sm) var(--px-radius-sm) 2px;
+  padding: 3px 8px;
+  min-width: 46px;
+  text-align: center;
+}
+.px-meter-read.is-critical {
+  color: var(--px-bad-ink);
+  background: var(--px-bad-wash);
+  border-color: var(--px-bad-line);
+}
+
+/* ── Tool cards — bevelled corner, hexagon icon, chevron chips ──────────── */
+.px-tools {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 1000px) {
+  .px-tools { grid-template-columns: minmax(0, 1fr); }
+}
+.px-tool {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--px-notch)) 0,
+    100% var(--px-notch),
+    100% 100%,
+    0 100%
+  );
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+.px-tool:hover {
+  border-color: var(--px-nova);
+  box-shadow: var(--px-shadow-3);
+  transform: translateY(-2px);
+}
+/* Locked tiles read as unavailable without going fully grey. */
+.px-tool.is-locked { background: var(--px-wash); }
+.px-tool-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+/* Rule 3 — hexagonal icon frame, the shape signature of this theme. */
+.px-tool-icon {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 48px;
+  background: var(--px-grad-soft);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 750;
+  line-height: 1;
+  color: var(--px-violet-deep);
+}
+.px-tool.is-locked .px-tool-icon {
+  background: #f1eef6;
+  color: var(--px-muted-2);
+  filter: grayscale(0.4);
+}
+.px-tool-title {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.012em;
+  color: var(--px-ink);
+  margin: 0;
+}
+.px-tool-desc {
+  font-size: 13px;
+  line-height: 1.58;
+  color: var(--px-muted);
+  margin: 0;
+  flex: 1 1 auto;
+}
+.px-tool-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+/* Chips carry a leading chevron instead of the siblings' diamond bullet. */
+.px-tool-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 10px 4px 8px;
+  border-radius: 2px var(--px-radius-sm) var(--px-radius-sm) 2px;
+  white-space: nowrap;
+}
+.px-tool-chip::before {
+  content: "";
+  width: 6px;
+  height: 8px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  opacity: 0.85;
+}
+.px-tool-chip--on        { background: var(--px-wash-2); color: var(--px-violet-deep); border: 1px solid var(--px-line); }
+.px-tool-chip--off       { background: #f4f2f8; color: var(--px-muted); border: 1px solid #e8e4ef; }
+.px-tool-chip--attention { background: var(--px-amber-wash); color: var(--px-amber-ink); border: 1px solid var(--px-amber-line); }
+
+/* ── Page topbar — bevelled band, hexagon badge, right-hand meta ────────── */
+.px-topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(90deg, var(--px-wash-2) 0%, #ffffff 58%);
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius);
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--px-notch)) 0,
+    100% var(--px-notch),
+    100% 100%,
+    0 100%
+  );
+  padding: 14px 18px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+/* Thin gradient underline ties the bar to the hero. */
+.px-topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 46%;
+  height: 2px;
+  background: var(--px-grad-line);
+}
+.px-topbar-badge {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 44px;
+  background: var(--px-grad);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  line-height: 1;
+  color: #ffffff;
+}
+.px-topbar-text { min-width: 0; }
+.px-topbar-title {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.012em;
+  color: var(--px-ink);
+  margin: 0;
+}
+.px-topbar-sub {
+  font-size: 12px;
+  color: var(--px-muted);
+  margin: 3px 0 0 0;
+}
+.px-topbar-meta {
+  margin-left: auto;
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--px-violet-deep);
+  background: #ffffff;
+  border: 1px solid var(--px-line);
+  border-radius: 2px var(--px-radius-sm) var(--px-radius-sm) 2px;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .px-topbar-meta { display: none; }
+}
+
+/* ── Figure row used on the optimizer / analytics pages ─────────────────── */
+.px-figure {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--px-line);
+  border-radius: var(--px-radius);
+  padding: 15px 18px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  height: 100%;
+  min-width: 0;
+  box-shadow: var(--px-shadow-1);
+}
+/* Same leading accent as the stat tiles, so the two rows read as one family. */
+.px-figure::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--px-grad-rail);
+}
+.px-figure--alert::before { background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%); }
+.px-figure--good::before  { background: linear-gradient(180deg, #34d399 0%, #0f9d6e 100%); }
+.px-figure-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--px-muted-2);
+  margin: 0;
+}
+.px-figure-value {
+  font-size: 25px;
+  line-height: 1.1;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--px-ink);
+  margin: 0;
+}
+.px-figure-value--alert { color: var(--px-bad-ink); }
+.px-figure-value--good { color: var(--px-ok-ink); }
+.px-figure-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .px-figure-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.px-figure-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) {
+  .px-figure-grid--three { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ── Image run tiles ──────────────────────────────────────────────────── */
+.px-shot {
+  padding: 3px;
+  border-radius: var(--px-radius-sm);
+  border: 2px solid var(--px-line);
+  background: #ffffff;
+  line-height: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.px-shot--working { border-color: var(--px-iris); box-shadow: 0 0 0 3px var(--px-ring-strong); }
+.px-shot--done { border-color: var(--px-ok); }
+.px-shot--failed { border-color: var(--px-bad); }
+.px-shot--skipped { border-color: #ded6ea; }
+
+/* ── Step rail — numbered list used by the Help page ───────────────────── */
+.px-step {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 38px;
+  background: var(--px-grad-soft);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--px-violet-deep);
+}
+
+/* ── Feature mark — the chevron that replaces the siblings' diamond ─────── */
+.px-mark {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 7px;
+  height: 9px;
+  background: var(--px-violet);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
